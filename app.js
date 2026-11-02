@@ -467,14 +467,18 @@ function groupCard(g, k) {
   const rows = `<ul class="list">${must.map(h => habitRow(h, k)).join("")}${more}</ul>`;
   const extra = g.id === "fard" && !complete ? `<div class="set" style="padding-top:0"><button class="btn ghost sm" data-act="tickfard">Tick all five prayers</button></div>` : "";
   if (complete) return `<details class="fold" ${detailsAttr("g:" + g.id, false)}><summary><span class="tickmark">${TICK}</span><h2>${esc(g.name)}</h2><span class="count">${dn}/${req.length}</span></summary>${rows}</details>`;
-  return `<section class="card" aria-label="${esc(g.name)}"><div class="cardhead"><h2>${esc(g.name)}</h2><span class="count">${dn}/${req.length}</span></div>${rows}${extra}</section>`;
+  return `<section class="card ledger" aria-label="${esc(g.name)}"><div class="cardhead"><h2>${esc(g.name)}</h2><span class="count">${dn}/${req.length}</span></div>${rows}${extra}</section>`;
 }
+
+// The day's score is a belt rank, as in BJJ: white, blue, purple, brown, black.
+const RANKS = [{ id: "white", name: "White belt" }, { id: "blue", name: "Blue belt" }, { id: "purple", name: "Purple belt" }, { id: "brown", name: "Brown belt" }, { id: "black", name: "Black belt" }];
+const rankOf = sc => RANKS[sc >= 100 ? 4 : sc >= 75 ? 3 : sc >= 50 ? 2 : sc >= 25 ? 1 : 0];
 
 function weekStrip(k) {
   let week = "";
   for (let i = 6; i >= 0; i--) {
     const dk = addDays(k, -i), s = score(dk);
-    week += `<button class="wd" data-act="goto" data-k="${dk}"${dk === k ? ' aria-current="date"' : ""} aria-label="${DAYN[wdIdx(dk)]} ${dateLabel(dk)}, ${s}%"><span class="bar"><i style="transform:scaleY(${s / 100})"></i></span>${DAYN[wdIdx(dk)].slice(0, 2)}</button>`;
+    week += `<button class="wd" data-act="goto" data-k="${dk}"${dk === k ? ' aria-current="date"' : ""} aria-label="${DAYN[wdIdx(dk)]} ${dateLabel(dk)}, ${s}%"><span class="bar" data-rank="${rankOf(s).id}"><i style="transform:scaleY(${s / 100})"></i></span>${DAYN[wdIdx(dk)].slice(0, 2)}</button>`;
   }
   return week;
 }
@@ -533,8 +537,8 @@ function viewToday() {
     ${show.quote ? quoteLine(k) : ""}
     <section class="score" aria-label="Score for ${esc(dateLabel(k))}">
       <div class="scoretop"><span class="big">${sc}<sup>%</sup></span>
-        <span class="scoremeta"><b>${doneN} of ${counted.length}</b>habits done${k !== todayKey() ? `<br><button class="go" data-act="goto" data-k="${todayKey()}">Back to today</button>` : ""}</span></div>
-      <div class="belt" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${sc}" aria-label="Habits done"><i style="transform:scaleX(${sc / 100})"></i></div>
+        <span class="scoremeta"><b>${doneN} of ${counted.length}</b>${rankOf(sc).name}${k !== todayKey() ? `<br><button class="go" data-act="goto" data-k="${todayKey()}">Back to today</button>` : ""}</span></div>
+      <div class="belt" data-rank="${rankOf(sc).id}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${sc}" aria-label="Habits done"><i style="transform:scaleX(${sc / 100})"></i></div>
       <div class="week">${weekStrip(k)}</div>
     </section>
     ${focusCard(k)}

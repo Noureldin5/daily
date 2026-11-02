@@ -1,5 +1,5 @@
 // Offline support. Bump VERSION whenever you change a file so phones pick up the update.
-const VERSION = "daily-v3";
+const VERSION = "daily-v5";
 const APP = ["./", "index.html", "style.css", "data.js", "content.js", "app.js", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
