@@ -19,7 +19,7 @@
   :root{
     --mat:#0F1628; --paper:#18223D; --ink:#EFE8CC; --muted:#A9B0C6; --blue:#8DB0F5; --line:#2B3858;
     --go:#4FB47A; --warn:#E0AE3E; --stop:#E8756A; --tip:#05080F; --onfill:#0B1222; --soft:#222E50;
-    --shadow:0 1px 0 rgba(255,255,255,.03),0 8px 20px -12px rgba(0,0,0,.7);
+    --shadow:none;
     color-scheme:dark;
   }
 }
@@ -88,7 +88,7 @@ button{cursor:pointer;touch-action:manipulation}
 .streak{font-size:var(--t-xs);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;line-height:1.2}
 .streak b{display:block;font-family:var(--display);font-size:var(--t-lg);color:var(--ink)}
 .pill{font-size:.7rem;padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-left:var(--s2);white-space:nowrap;vertical-align:2px}
-.go{display:inline-flex;align-items:center;justify-content:center;min-height:var(--tap);min-width:var(--tap);font-size:var(--t-sm);font-weight:700;color:var(--blue);background:none;border:0;padding:0 var(--s2)}
+.go{display:inline-flex;align-items:center;justify-content:center;min-height:var(--tap);min-width:var(--tap);font-size:var(--t-sm);font-weight:700;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;background:none;border:0;padding:0 var(--s2)}
 
 /* collapsed group that is fully done */
 details.fold{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin:0 0 var(--s3);overflow:hidden;box-shadow:var(--shadow)}
@@ -214,9 +214,8 @@ details.block li:first-child{border-top:0}
 
 
 /* reminder, quote, nudge */
-.kicker{font-size:var(--t-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kicker{font-size:var(--t-sm);font-weight:700;color:var(--muted)}
 .remind{padding:var(--s4)}
-.remind .kicker::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--go);margin-right:var(--s2)}
 .rhead{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3);margin-bottom:var(--s2)}
 .ref{font-size:var(--t-sm);color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
 .rar{font-size:clamp(1.7rem,7vw,2.2rem);line-height:2;margin:0 0 var(--s2)}
@@ -227,7 +226,7 @@ details.block li:first-child{border-top:0}
 .quote blockquote{margin:0;font-size:var(--t-md);font-style:italic;line-height:1.45}
 .quote figcaption{margin-top:var(--s1);font-size:var(--t-sm);color:var(--muted)}
 .quote .row{gap:0;margin-top:calc(var(--s1) * -1)}
-.go[aria-pressed="true"]{color:var(--go)}
+.go[aria-pressed="true"]{text-decoration-color:var(--go)}
 .nudge{margin:0 0 var(--s3);padding:var(--s2) var(--s3);background:var(--soft);border-radius:10px;font-size:var(--t-sm)}
 .nudge small{color:var(--muted)}
 .focus .tt{display:flex;justify-content:space-between;gap:var(--s3);align-items:baseline;margin-top:var(--s1)}
@@ -287,11 +286,16 @@ details.fold>.set{padding-top:var(--s2)}
 @keyframes toastin{from{opacity:0;transform:translate(-50%,8px)}}
 
 
-details.more>summary{list-style:none;display:flex;align-items:center;min-height:var(--tap);padding:0 var(--s2);font-size:var(--t-sm);font-weight:700;color:var(--blue);cursor:pointer;border-top:1px solid var(--line)}
+details.more>summary{list-style:none;display:flex;align-items:center;min-height:var(--tap);padding:0 var(--s2);font-size:var(--t-sm);font-weight:700;color:var(--ink);cursor:pointer;border-top:1px solid var(--line)}
 details.more>summary::-webkit-details-marker{display:none}
 details.more>summary::after{content:"+";margin-left:var(--s2)}
 details.more[open]>summary::after{content:"–"}
 details.more>.list{padding:0}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+
+/* dark: surfaces step lighter than the ground, so cards need no outline */
+@media (prefers-color-scheme:dark){
+  .card,.score,details.fold,details.block,.tap,.breathprompt,.mode:not([aria-pressed="true"]),.iconbtn{border-color:transparent}
 }
